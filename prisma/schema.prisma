@@ -1,0 +1,53 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum ContactTopic {
+  SALES
+  ENTERPRISE
+  INTEGRATIONS
+  SUPPORT
+  BILLING
+  PARTNERSHIPS
+}
+
+enum CheckoutPlanId {
+  STARTER
+  PRO_MONTHLY
+  PRO_ANNUAL
+  TEAM_MONTHLY
+  TEAM_ANNUAL
+}
+
+model ContactLead {
+  id        String       @id @default(cuid())
+  name      String
+  email     String
+  topic     ContactTopic
+  company   String?
+  message   String
+  createdAt DateTime     @default(now())
+
+  @@index([email])
+  @@index([topic])
+  @@index([createdAt])
+}
+
+model CheckoutIntent {
+  id        String         @id @default(cuid())
+  planId    CheckoutPlanId
+  email     String
+  fullName  String
+  company   String?
+  country   String
+  createdAt DateTime       @default(now())
+
+  @@index([email])
+  @@index([planId])
+  @@index([createdAt])
+}
